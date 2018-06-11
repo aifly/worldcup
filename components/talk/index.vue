@@ -5,6 +5,10 @@
 			<section>
 				<div class="zmiti-talk-title">
 					<img :src="imgs.talkTitle" alt="">
+					<div class="zmiti-barrage" v-for='(barrage,i) in barrageList' :key='i'>
+						<span>{{barrage.name}} : </span>
+						<span>{{barrage.content}}</span>
+					</div>
 				</div>
 				<div class="zmiti-talk-content" :style="{background:'url('+imgs.talkBg+') repeat-y'}"></div>
 			</section>
@@ -45,6 +49,8 @@
 				viewW: window.innerWidth,
 				viewH: window.innerHeight,
 				showMasks: false,
+				barrageList:[],
+				talkList:[]
 			}
 		},
 	
@@ -56,13 +62,19 @@
 				window.location.href = window.location.href.split('?')[0];
 			},
 			getBarrage(){//获取弹幕
-				$.getJSON("./assets/images/barrage.json",(data)=>{
-
+				var s = this;
+				$.getJSON("./assets/data/barrage.json",(data)=>{
+					if(data.code === 0){
+						s.barrageList = data.list;
+					}
 				});
 			},
 			getTalk(){
-				$.getJSON("./assets/images/talk.json",(data)=>{
-					
+				var s = this;
+				$.getJSON("./assets/data/talk.json",(data)=>{
+					if(data.code === 0){
+						s.talkList = data.list;
+					}
 				});
 			}
 			
@@ -74,7 +86,10 @@
 			this.scroll = new IScroll(this.$refs['page'],{
 				scrollbars:true,
 				bounce:false
-			})
+			});
+
+			this.getBarrage();
+			this.getTalk();
 
 		}
 	

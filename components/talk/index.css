@@ -3,16 +3,14 @@
   height: 100%;
   position: absolute;
   left: 0;
-  top: 0;
-}
+  top: 0; }
 
 .zmiti-text-overflow {
   overflow: hidden;
   white-space: nowrap;
   word-break: break-all;
   text-overflow: ellipsis;
-  -webkit-text-overflow: ellipsis;
-}
+  -webkit-text-overflow: ellipsis; }
 
 .zmiti-play {
   width: .8rem;
@@ -21,32 +19,30 @@
   position: fixed;
   z-index: 1000;
   right: .5rem;
-  top: .5rem;
-}
-
-.zmiti-play.rotate {
-  -webkit-animation: rotate 5s linear infinite;
-  animation: rotate 5s linear infinite;
-}
+  top: .5rem; }
+  .zmiti-play.rotate {
+    -webkit-animation: rotate 5s linear infinite;
+    animation: rotate 5s linear infinite; }
 
 @-webkit-keyframes rotate {
   to {
     -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-
+    transform: rotate(360deg); } }
 .zmiti-talk-main-ui {
   opacity: 0;
   z-index: -1;
-  background: #fdf7eb;
-}
+  background: #fdf7eb; }
+  .zmiti-talk-main-ui > section .zmiti-talk-content {
+    min-height: 2000px; }
+  .zmiti-talk-main-ui > section .zmiti-talk-title {
+    position: relative; }
+  .zmiti-talk-main-ui > section .zmiti-barrage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #fff; }
+  .zmiti-talk-main-ui.show {
+    z-index: 1230;
+    opacity: 1; }
 
-.zmiti-talk-main-ui > section .zmiti-talk-content {
-  min-height: 2000px;
-}
-
-.zmiti-talk-main-ui.show {
-  z-index: 1230;
-  opacity: 1;
-}
+/*# sourceMappingURL=index.css.map */

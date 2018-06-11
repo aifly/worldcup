@@ -17,6 +17,15 @@ $color: #fffb88;
             min-height: 2000px;
             //border:1px solid red;
         }
+        .zmiti-talk-title{
+            @include pos(r);
+        }
+        .zmiti-barrage{
+            @include pos(a);
+            left: 0;
+            top: 0;
+            color:#fff;
+        }
     }
 
     &.show {
