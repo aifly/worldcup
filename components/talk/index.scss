@@ -49,6 +49,9 @@ $color: #fffb88;
             margin-top: -15px;
            // min-height: 2000px;
 
+            border:1px solid #fff;
+            overflow: hidden;
+
             li {
                 width: 90%;
                 margin: 15px auto;
@@ -110,6 +113,7 @@ $color: #fffb88;
 
         .zmiti-talk-title {
             @include pos(r);
+
         }
 
         .zmiti-barrage {
@@ -235,9 +239,10 @@ $color: #fffb88;
         .zmiti-talk-score {
             text-align: center;
             color: #fff;
-            font-size: 60px;
+            font-size: 50px;
             letter-spacing: 20px;
             font-weight: bold;
+            margin-top: -20px;
         }
 
         .zmiti-countdown {

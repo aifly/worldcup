@@ -2,7 +2,7 @@
 	<transition name='main'>
 	
 		<div class="lt-full zmiti-talk-main-ui " :class="{'show':show}">
-			<section ref='page' class=""  :style="{height:viewH-100+'px',position:'relative',overflow:'hidden'}">
+			<section  class=""  :style="{height:viewH-100+'px',position:'relative',overflow:'hidden'}">
 				<div>
 					<div class="zmiti-talk-title">
 						<img :src="imgs.talkTitle" alt="">
@@ -39,7 +39,8 @@
 								</div>
 							</div>
 							<div class="zmiti-talk-score">
-								{{points.split('-')[0] + " ：" + points.split('-')[1]}}
+								<span v-if='false'>{{points.split('-')[0] + " ：" + points.split('-')[1]}}</span>
+								3:0
 							</div>
 
 							<div class="zmiti-countdown">
@@ -48,7 +49,7 @@
 							</div>
 						</section>
 					</div>
-					<div class="zmiti-talk-content" :style="{background:'url('+imgs.talkBg+') repeat-y'}">
+					<div class="zmiti-talk-content" :style="{background:'url('+imgs.talkBg+') repeat-y',height:viewH-100-584+'px'}" ref='page'>
 						<ul>
 							<li v-for='(talk,i) in talkList' :key="i">
 								<div>
@@ -110,7 +111,7 @@
 				text:'',
 				showTeam: false,
 				showQrcode: false,
-				show: false,
+				show: true,
 				team1:{},
 				points:"",
 				team2:{},
