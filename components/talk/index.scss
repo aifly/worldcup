@@ -9,22 +9,252 @@ $color: #fffb88;
     opacity: 0;
     z-index: -1;
     background: #fdf7eb;
-
-    &>section{
-
-        
-        .zmiti-talk-content{
-            min-height: 2000px;
-            //border:1px solid red;
+    @include displayBox(vertical);
+    .zmiti-talk-form{
+        height: 100px;
+        width: 100%;
+        background:#fff;
+        &>div{
+            width: 90%;
+            margin: 0 auto;
+            line-height: 100px;
         }
-        .zmiti-talk-title{
+        input{
+            width: 84%;
+            border:1px solid #cccccc;
+            height: 60px;
+            vertical-align: middle;
+            font-size:32px;
+            outline: none;
+        }
+        span{
+            border:1px solid  #ccc;
+            padding:8px 16px;
+            vertical-align: middle;
+            @include pos(r);
+            top: 2px;
+            @include br(10px);
+            color:#ccc;
+            &.active{
+                background:#20ab2c;
+                color:#fff;
+            }
+        }
+        
+    }
+    & > section {
+        -webkit-box-flex:1;
+        .zmiti-talk-content {
+            padding-top: 40px;
+            margin-top: -15px;
+           // min-height: 2000px;
+
+            li {
+                width: 90%;
+                margin: 15px auto;
+
+                @include displayBox(horizontal);
+
+                -webkit-box-pack: start;
+                & > div {
+                    &:nth-of-type(1) {
+                        text-align: center;
+                        color: #fff;
+                        font-size: 28px;
+                    }
+
+                    &:nth-of-type(2) {
+                        margin-left: 40px;
+
+                        .zmiti-talk-img{
+                            background: #fff;
+                            padding: 10px;
+                            box-sizing: border-box;
+                            img{
+                                z-index: 10;
+                                @include pos(r);
+                            }
+                           
+                        }
+                        & > div {
+                            background: #fff;
+                            padding:20px 20px;
+                            @include br(10px);
+                            @include pos(r);
+                            &:before{
+                                content:'';
+                                @include pos(a);
+                                width: 26px;
+                                height: 26px;
+                                background:#fff;
+                                @include transform(rotate(45deg));
+                                left: -10px;
+                                top: 50%;
+                                margin-top: -20px;
+                                
+                            }
+                        }
+                    }
+                }
+
+                .zmiti-headimg {
+                    width: 80px;
+                    display: block;
+
+                    @include br;
+
+                    border: 6px solid #fff;
+                }
+            }
+        }
+
+        .zmiti-talk-title {
             @include pos(r);
         }
-        .zmiti-barrage{
+
+        .zmiti-barrage {
             @include pos(a);
-            left: 0;
+
+            left: 100%;
             top: 0;
-            color:#fff;
+            color: #fff;
+            -webkit-animation: move 4s linear infinite;
+            width: 100%;
+        }
+
+        @for $i from 1 through 50 {
+           
+            .zmiti-barrage:nth-of-type(#{$i}){
+                $time:6s;
+                -webkit-animation: move 5s *$i linear infinite;
+                
+                @if $i % 3 == 0 {
+                    top:40px;
+                     //-webkit-animation-duration: $time+2;
+                }
+                @if $i % 3 == 1 {
+                    top: 80px;
+                    //-webkit-animation-duration: $time+4;
+                }
+                
+            }
+        }
+
+        @-webkit-keyframes move{
+            to{
+                -webkit-transform: translate3d(-1250px,0,0)
+            }
+        }
+
+        .zmiti-talk-pk-C {
+            @include pos(a);
+
+            top: 120px;
+            width: 100%;
+        }
+
+        .zmiti-pk {
+            @include displayBox(horizontal);
+
+            -webkit-box-pack: justify;
+            &:nth-of-type(1) {
+                &>div{
+                    @include pos(r);
+                    &:nth-of-type(3){
+                        span{
+                            left: 28%;
+                        }
+                    }
+                }
+                span{
+                    @include pos(a);
+                    width: 72%;
+                    top: 30px;
+                    height: 50px;
+                    line-height: 50px;
+                    color:#fff;
+                    text-align: center;
+                }
+            }
+            &:nth-of-type(2) {
+                width: 96%;
+                margin: 10px auto;
+
+                & > div {
+                    @include pos(r);
+
+                    img {
+                        width: 60px;
+
+                        @include pos(r);
+
+                        z-index: 10;
+                    }
+
+                    &:nth-of-type(1) {
+                        -webkit-box-flex: 1;
+                        text-align: right;
+
+                        span {
+                            background-image: -webkit-linear-gradient(top, #db595d, #a1060a);
+                        }
+                    }
+
+                    &:nth-of-type(2) {
+                        width:120px;
+                        margin: 0 10px;
+                        img{width: 100%;}
+                    }
+
+                    &:nth-of-type(3) {
+                        -webkit-box-flex: 1;
+
+                        span {
+                            background-image: -webkit-linear-gradient(top, #4a6995, #1c3b67);
+                        }
+                    }
+                }
+
+                span {
+                    @include pos(a);
+
+                    left: 0;
+                    top: 50%;
+                    margin-top: -10px;
+                    width: 98%;
+                    height: 20px;
+                    background: #fff;
+
+                    @include br(10px);
+
+                    border: 2px solid #e2c352;
+                }
+            }
+        }
+
+        .zmiti-talk-score {
+            text-align: center;
+            color: #fff;
+            font-size: 60px;
+            letter-spacing: 20px;
+            font-weight: bold;
+        }
+
+        .zmiti-countdown {
+            width: 200px;
+            margin: 20px auto;
+
+            @include pos(r);
+
+            span {
+                @include pos(a);
+
+                color: #ffa105;
+                font-size: 36px;
+                width: 100%;
+                text-align: center;
+                top: 20px;
+            }
         }
     }
 
@@ -32,7 +262,4 @@ $color: #fffb88;
         z-index: 1230;
         opacity: 1;
     }
-
-    
 }
-

@@ -19,7 +19,7 @@
         }, {
             "headimgurl": "./assets/images/xiaoxin-head.png",
             "nickname": "小新",
-            "image": "./assets/images/chart.jpg",
+            "image": "./assets/images/chart.png",
             "text": "",
             "video": "",
             "videoposter":""
@@ -38,7 +38,7 @@
             "video": "./assets/video/index.mp4",
             "videoposter":"./assets/images/poster.jpg"
         }, {
-            "headimgurl": "./assets/imag es/xiaoxin-head.png",
+            "headimgurl": "./assets/images/xiaoxin-head.png",
             "nickname": "专家",
             "image": "",
             "text": "所以我认为B队会羸",

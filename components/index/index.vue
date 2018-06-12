@@ -1,7 +1,20 @@
 <template>
-	<div   class="lt-full zmiti-index-main-ui " :style="{background:'url('+imgs.indexBg+') no-repeat center bottom',backgroundSize:'cover'}"  :class="{'show':show}">
+	<div   class="lt-full zmiti-index-main-ui "  :style="{background:'url('+imgs.indexBg+') no-repeat center bottom',backgroundSize:'cover'}"  :class="{'show':show,'active':createImg}" ref='page'>
+		<transition 
+			name='zmiti-scale'
+			@after-enter='afterEnter'
+			>
+				<div ref='createimgs' class="zmiti-createimg"  v-if='createImg'>
+					<img :src="createImg" alt="">
+					<div v-show='showShareBtn' class="zmiti-share-btn" v-tap='[showMask]'>分享</div>
+				</div>
+			</transition>
 		<transition name='index'>
 			<div class="zmiti-index lt-full" v-if='!showIndexMask'>
+				
+				<div class="zmiti-index-logo">
+					<img :src="imgs.logo2" alt="">
+				</div>
 				<div class="zmiti-title">
 					
 						<img :src="imgs.indexTitle" alt="">
@@ -23,16 +36,16 @@
 							<div class="zmiti-score">
 								<section>
 									<img :src="imgs.xiaoxinTextBg" alt="">
-									<div>小新预测莫斯科中央陆军会赢</div>
+									<div :style='{marginTop:!showBtns?"36px":"20px"}'>{{rate}}</div>
 									<div>比分{{team1.score}}:{{team2.score}}</div>
 								</section>
 							</div>
 						</div>
 				</div>
 				<div class="zmiti-index-bottom">
-					<div class="zmiti-index-btns">
-						<div>认 同</div>
-						<div>PK小新</div>
+					<div class="zmiti-index-btns" v-show='showBtns'>
+						<div v-tap='[html2img]'>认 同</div>
+						<div v-tap='[entry]'>PK小新</div>
 					</div>
 				</div>
 				<canvas :width="viewW" height="900" ref='canvas'>
@@ -40,6 +53,10 @@
 				</canvas>
 			</div>
 		</transition>
+
+		<div class="zmiti-mask lt-full" v-if='showMasks' @touchstart='hideMask'>
+			<img :src="imgs.arrow">
+		</div>
 	</div>
 </template>
 
@@ -47,6 +64,7 @@
 	import './index.css';
 	import {imgs} from '../lib/assets.js';
 	import zmitiUtil from '../lib/util';
+	import '../lib/html2canvas';
 	import Point from './point';
 	export default {
 		props:['obserable','nickname','pv'],
@@ -59,57 +77,110 @@
 				points:[],
 				team1:{},
 				team2:{},
+				rate:'',
 				show:true,
+				showShareBtn:false,
+				showBtns:true,
 				showIndexMask:false,
 				showMasks:false,
+				score:'',
 				transX:-200,
 				showVideo:false,
 				viewW:window.innerWidth,
 				fullscreen:true,
-				vidoeUrl:'./assets/video/index1.mp4'
+				vidoeUrl:'./assets/video/index1.mp4',
+				createImg:''
 			}
 		},
 		components:{
 		},
 		
 		methods:{
-
+			hideMask(){
+				this.showMasks = false;
+			},
 			imgStart(e){
 				e.preventDefault(); 
 			},
-
+			showMask(){
+				this.showMasks = true;
+			},
+			afterEnter(){
+				this.showShareBtn = true;
+			},
 			entry(){
 				
 				var {obserable} = this;
-				this.showIndexMask = true;
-				this.showVideo = true;
+				this.show = false;
+				var s = this;
+				obserable.trigger({
+					type:'entryTalk',
+					data:{
+						team1:s.team1,
+						team2:s.team2,
+						points:s.score
+					}
+				})
+			},
 
+			html2img(){
+				var s = this;
+				this.showBtns = false;
+				this.rate = '我与小新的预测相同'
+
+				//zmitiUtil.wxConfig('我是第'+(s.pv)+'位种树者',window.desc)
+				var {obserable} = this;
 				setTimeout(()=>{
-					this.$refs['video'].addEventListener('play',()=>{
-		 				obserable.trigger({
-		 					type:"toggleBgMusic",
-		 					data:false
-		 				})
-		 			})
+					var ref = 'page';
+					var dom = this.$refs[ref];
+					html2canvas(dom,{
+						useCORS: true,
+						onrendered: function(canvas) {
+					        var url =  canvas.toDataURL('image/jpg');
+							console.log(url);
 
-		 			this.$refs['video'].addEventListener('ended',()=>{
-		 				/* obserable.trigger({
-		 					type:"toggleBgMusic",
-		 					data:true
-						 }); */
-						 
-						 obserable.trigger({
-							 type:'entryIntro'
-						 });
-		 			})
+							 s.createImg = url;
+							 
+							 return
+							
+					        $.ajax({
+					          //url: window.protocol+'//api.zmiti.com/v2/share/base64_image/',
+					          url:window.protocol+'//'+window.server+'.zmiti.com/v2/share/base64_image/',
+					          type: 'post',
+					          data: {
+					            setcontents: url,
+					            setwidth: dom.clientWidth,
+					            setheight:dom.clientHeight
+					          },
+					          error(){
+					          },
+					          success: function(data) {
+					          	//alert('data.getret =>'+data.getret)
+					            if (data.getret === 0) {
+					            	//s.deleteImg(dt.img);
 
-		 			/* this.$refs['video'].addEventListener('pause',()=>{
-		 				this.show && this.$refs['video'].play()	
-					 }) */
-					 
-					 
-					this.$refs['video'].play()
-				},200)
+
+					            	s.canShare = true;//可以分享了
+					               var src = data.getimageurl;
+					             
+	
+									var url = window.location.href.split('#')[0];
+
+									url = zmitiUtil.changeURLPar(url,'src',src);
+									url = zmitiUtil.changeURLPar(url,'num',s.pv);
+									zmitiUtil.wxConfig('我是第'+(s.pv)+'位种树者',window.desc,url)
+								       
+					            }else{
+					            }
+
+					          }
+					        })
+
+					      },
+					      width: dom.clientWidth,
+					      height:dom.clientHeight
+					})
+				},1000)
 			},
 
 			initPoints(){
@@ -162,6 +233,34 @@
 			},
 			getBaseData(){
 				var s = this;
+				$.ajax({
+					url:"http://119.84.122.135:27701/predict/1",
+					success(data){
+						if(typeof data === 'string'){
+							try {
+								data = JSON.parse(data);
+								if(data.code === 0){
+									console.log(data);
+									s.rate = data.rate;
+									//s.rate = '我和小新的预测相同';
+									s.score = data.points;
+									s.team1 = {
+										teamname:data.host,
+										score:data.points.split('-')[0]
+									}
+									s.team2 = {
+										teamname:data.guest,
+										score:data.points.split('-')[1]
+									}
+								}
+							} catch (error) {
+								
+							}
+						}
+						
+					}
+				});
+				return;
 				$.getJSON("./assets/data/base.json",(data)=>{
 					if(data.code === 0){
 						s.team1 = data.basedata.teams[0];
@@ -175,6 +274,7 @@
 		mounted(){
 			this.getBaseData();
 
+		//	this.createImg = './assets/images/create.png';
 			var {obserable} = this;
 
 			obserable.on('toggleIndex',(data)=>{
@@ -183,42 +283,7 @@
 
 			this.initPoints();
 			 
-			var s = this;
-			s.lastX = '';
-			s.lastY = '';
-			var i =0 ;
-			var startX,startY;
- 			window.addEventListener("deviceorientation", function(event) {
-			      
-
-			     // document.title = event.beta|0;
-			     i++;
-			      if(i===1){
-			      	startY = event.beta;
-			      }
-
-			      var x =  event.gamma|0,
-			      	  y = event.beta|0;
-
-			      if(x<-35){
-			      	x=-35;
-			      }
-			      if(x>10){
-			      	x=10
-			      }
-			     
-			     //document.title = x;
-
-
-			      s.transX = x ;
-			     
-
-			    
-
-
-			    	      
-
-			}, true);
+			 
 
 
 		}

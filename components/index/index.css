@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .lt-full {
   width: 100%;
   height: 100%;
@@ -46,9 +47,72 @@
   z-index: -1;
 }
 
+.zmiti-index-main-ui.active:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.zmiti-index-main-ui .zmiti-createimg {
+  -webkit-transform: scale(0.75);
+  transform: scale(0.75);
+  -webkit-transform-origin: center 45%;
+  transform-origin: center 45%;
+  box-sizing: border-box;
+  position: absolute;
+  z-index: 102;
+}
+
+.zmiti-index-main-ui .zmiti-createimg.zmiti-scale-enter-active, .zmiti-index-main-ui .zmiti-createimg.zmiti-scale-leave-active {
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.zmiti-index-main-ui .zmiti-createimg.zmiti-scale-enter, .zmiti-index-main-ui .zmiti-createimg.zmiti-scale-leave-to {
+  -webkit-transform: scale(1);
+  transform: scale(1);
+}
+
+.zmiti-index-main-ui .zmiti-createimg:after {
+  content: '长按保存图片';
+  position: absolute;
+  color: #fff;
+  font-size: 30px;
+  bottom: 0;
+  left: 101%;
+}
+
+.zmiti-index-main-ui .zmiti-createimg img {
+  border: 10px solid #fff;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.zmiti-index-main-ui .zmiti-createimg .zmiti-share-btn {
+  position: absolute;
+  z-index: 10;
+  color: #fff;
+  background: #aa0707;
+  margin-top: 30px;
+  left: 50%;
+  -webkit-transform: translateX(-50%) scale(1.2);
+  transform: translateX(-50%) scale(1.2);
+  padding: 14px 40px;
+  border-radius: 10px;
+  border: 2px solid #fff;
+}
+
 .zmiti-index-main-ui.show {
   opacity: 1;
   z-index: 200;
+}
+
+.zmiti-index-main-ui .zmiti-index-logo {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .zmiti-index-main-ui canvas {
@@ -106,11 +170,9 @@
 .zmiti-index-main-ui .zmiti-title {
   position: relative;
   width: 100vw;
-  left: 50%;
+  left: 0%;
   top: 0vh;
   z-index: 10;
-  -webkit-transform: translate3d(-50%, 0, 0);
-  transform: translate3d(-50%, 0, 0);
   display: -webkit-box;
   -webkit-box-align: center;
   -webkit-box-pack: center;
