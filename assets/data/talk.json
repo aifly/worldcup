@@ -8,6 +8,7 @@
             "text": "小新预测皇家马德里会羸",
             "image": "",
             "video": "",
+            "isreverse":false,
             "videoposter":""
         }, {
             "headimgurl": "./assets/images/xiaoxin-head.png",
@@ -15,6 +16,7 @@
             "text": "比分为3:1",
             "image":"",
             "video":"",
+            "isreverse":true,
             "videoposter":""
         }, {
             "headimgurl": "./assets/images/xiaoxin-head.png",
@@ -22,6 +24,7 @@
             "image": "./assets/images/chart.png",
             "text": "",
             "video": "",
+            "isreverse":false,
             "videoposter":""
         }, {
             "headimgurl": "./assets/images/xiaoxin-head.png",
@@ -29,6 +32,7 @@
             "image": "",
             "text": "我同意小新的说法",
             "video": "",
+            "isreverse":true,
             "videoposter":""
         }, {
             "headimgurl": "./assets/images/xiaoxin-head.png",
@@ -36,6 +40,7 @@
             "image": "",
             "text": "",
             "video": "./assets/video/index.mp4",
+            "isreverse":false,
             "videoposter":"./assets/images/poster.jpg"
         }, {
             "headimgurl": "./assets/images/xiaoxin-head.png",
@@ -43,6 +48,7 @@
             "image": "",
             "text": "所以我认为B队会羸",
             "video": "",
+            "isreverse":true,
             "videoposter": ""
         }
     ]

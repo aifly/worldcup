@@ -120,7 +120,7 @@ var zmitiUtil = {
 		})
 	},
 
-	getOauthurl: function(obserable) {
+	getOauthurl: function(fn) {
 
 		/*$.ajax({
 			type:"post",
@@ -139,30 +139,13 @@ var zmitiUtil = {
 		} = this.wxInfo();
 
 		if (!s.isWeiXin()) {
-			setTimeout(()=>{
-				obserable.trigger({
-					type:'initWebgl'
-				})
-			},2000)
 			return;
 		}
 		var key = 'headimgurl8'
 		if(window.localStorage.getItem('nickname') && window.localStorage.getItem(key)){
-			if (obserable) {
-				obserable.trigger({
-					type: 'setUserInfo',
-					data: {
-						nickname:window.localStorage.getItem('nickname'),
-						headimgurl: window.localStorage.getItem(key)
-					}
-				})
-
-				setTimeout(()=>{
-					obserable.trigger({
-						type:'initWebgl'
-					})
-				},2000)
-			}
+			window.nickname = window.localStorage.getItem('nickname')
+			window.headimgurl = window.localStorage.getItem(key);
+			fn&& fn();
 			return;
 		}
 		$.ajax({
@@ -185,6 +168,7 @@ var zmitiUtil = {
 					window.nickname = s.nickname;
 					window.headimgurl = s.headimgurl;
 					window.openid = s.openid;
+					fn && fn();
 					$.ajax({
 						url:"http://h5.zhongguowangshi.com/interface/public/index.php?s=v2/Share/createImageByUrl",
 						type:'post',

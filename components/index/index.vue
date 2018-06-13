@@ -36,7 +36,7 @@
 							<div class="zmiti-score">
 								<section>
 									<img :src="imgs.xiaoxinTextBg" alt="">
-									<div :style='{marginTop:!showBtns?"36px":"20px"}'>{{rate}}</div>
+									<div :style='{marginTop:!showBtns?"36px":"10px"}'>{{rate}}</div>
 									<div>比分{{team1.score}}:{{team2.score}}</div>
 								</section>
 							</div>
@@ -53,6 +53,8 @@
 				</canvas>
 			</div>
 		</transition>
+		
+		
 
 		<div class="zmiti-mask lt-full" v-if='showMasks' @touchstart='hideMask'>
 			<img :src="imgs.arrow">
@@ -78,7 +80,7 @@
 				team1:{},
 				team2:{},
 				rate:'',
-				show:true,
+				show:true, 
 				showShareBtn:false,
 				showBtns:true,
 				showIndexMask:false,
@@ -89,7 +91,8 @@
 				viewW:window.innerWidth,
 				fullscreen:true,
 				vidoeUrl:'./assets/video/index1.mp4',
-				createImg:''
+				createImg:'',
+				running:true
 			}
 		},
 		components:{
@@ -120,7 +123,10 @@
 						team2:s.team2,
 						points:s.score
 					}
-				})
+				});
+				setTimeout(() => {
+					this.running = false;
+				}, 100);
 			},
 
 			html2img(){
@@ -224,7 +230,8 @@
 						}
 						point.update();
 					});
-					!this.showIndexMask && animationFrame(render);
+				
+					this.running && animationFrame(render);
 				}
 				
 				render()
@@ -241,7 +248,7 @@
 								data = JSON.parse(data);
 								if(data.code === 0){
 									console.log(data);
-									s.rate = data.rate;
+									/* s.rate = data.rate;
 									//s.rate = '我和小新的预测相同';
 									s.score = data.points;
 									s.team1 = {
@@ -251,7 +258,15 @@
 									s.team2 = {
 										teamname:data.guest,
 										score:data.points.split('-')[1]
+									} */
+									s.team1 = data.basedata.teams[1];
+									s.team2 = data.basedata.teams[0];
+									if(s.team1.score>s.team2.score){
+										s.rate = '小新预判'+s.team1.teamname+'队将获胜!';
+									}else{
+										s.rate = '小新预判'+s.team2.teamname+'队将获胜!';
 									}
+									//if(data.b)
 								}
 							} catch (error) {
 								

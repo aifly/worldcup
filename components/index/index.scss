@@ -163,7 +163,7 @@ $bgColor: #4081dd;
                 &:nth-of-type(1) {
 					
                     span {
-						line-height: 150px;
+						//line-height: 150px;
 						width: 65%;
 						left: 0;
 						right: auto;
@@ -177,7 +177,7 @@ $bgColor: #4081dd;
                 height: 100%;
                 text-align: center;
                 top: 0;
-                line-height: 100px;
+                line-height: 150px;
 				width: 70%;
 				right: 0;
                 //font-size: 32px;
@@ -215,11 +215,18 @@ $bgColor: #4081dd;
 							margin-top: 10px;
 							color:#d31b19;
 							font-size:32px;
-						}
+                        }
+                        &:nth-of-type(2){
+                            text-align: right;
+                        }
 					}
 				}
 			}
         }
+    }
+    .zmiti-result{
+        background:rgba(0,0,0,.5);
+        z-index: 100;
     }
 }
 

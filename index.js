@@ -103,7 +103,7 @@ new Vue({
 				url: window.protocol + '//api.zmiti.com/v2/custom/update_pvnum/',
 				type: 'post',
 				data: {
-					customid: 60
+					customid: 61
 				}
 			}).done((data) => {
 				if (data.getret === 0) {
@@ -177,9 +177,11 @@ new Vue({
 			this.pv += data;
 
 		});
-		//zmitiUtil.getOauthurl(obserable);
+		zmitiUtil.getOauthurl(()=>{
+			this.updatePv();
+		});
 		zmitiUtil.wxConfig(document.title, window.desc);
-		this.updatePv();
+		
 		return;
 		/*$.ajax({
 			type:'post',
