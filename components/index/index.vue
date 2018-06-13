@@ -262,9 +262,9 @@
 									s.team1 = data.basedata.teams[1];
 									s.team2 = data.basedata.teams[0];
 									if(s.team1.score>s.team2.score){
-										s.rate = '小新预判'+s.team1.teamname+'队将获胜!';
+										s.rate = '小新通过大数据分析预判'+s.team1.teamname+'队将获胜!';
 									}else{
-										s.rate = '小新预判'+s.team2.teamname+'队将获胜!';
+										s.rate = '小新通过大数据分析预判'+s.team2.teamname+'队将获胜!';
 									}
 									//if(data.b)
 								}
