@@ -45,7 +45,7 @@
 
 							<div class="zmiti-countdown">
 								<img :src="imgs.countdownBg" alt="">
-								<span>00 : {{countdown<10?'0'+countdown:countdown}}</span>
+								<span>0{{(countdown/60|0)}} : {{countdown%60<10?'0'+countdown%60:countdown%60}}</span>
 							</div>
 						</section>
 					</div>
@@ -144,7 +144,7 @@
 				showTel:false,
 				tel:NaN,
 				talkList:[],
-				countdown:30,
+				countdown:120,
 				stop:false,
 			}
 		},
