@@ -10,6 +10,115 @@ $color: #fffb88;
     z-index: -1;
     background: #fdf7eb;
     @include displayBox(vertical);
+
+
+    .zmiti-createimg {
+        @include transform(scale(.75));
+        @include transformOrigin(center 45%); //border: 5px solid $color;
+        box-sizing: border-box;
+        @include pos(a);
+        z-index: 102;
+        &.zmiti-scale-enter-active,
+        &.zmiti-scale-leave-active {
+            @include transition(.5s);
+        }
+        &.zmiti-scale-enter,
+        &.zmiti-scale-leave-to {
+            @include transform(scale(1));
+        }
+        &:after {
+            content: '长按保存图片';
+            @include pos(a);
+            color: #fff;
+            font-size: 30px;
+            bottom: 0;
+            left: 101%;
+        }
+        img {
+            border: 10px solid #fff;
+            box-sizing: border-box;
+            @include br(10px);
+        }
+        .zmiti-share-btn {
+            @include pos(a);
+            z-index: 10;
+            color: #fff;
+            background: #aa0707;
+            margin-top: 30px;
+            left: 50%;
+            @include transform(translateX(-50%) scale(1.2));
+            padding: 14px 40px;
+            @include br(10px);
+            border: 2px solid #fff;
+        }
+    }
+
+    .zmiti-result-page{
+        z-index: 199000;
+        .zmiti-result-content{
+            width: 600px;
+            height: 500px;
+            @include pos(a);
+            left: 50%;
+            top:50%;
+            @include transform(translate(-50%,-50%));
+
+            .zmiti-result-user{
+                @include displayBox(horizontal);
+                color:#fffd58;
+                div{
+                    margin: 10px;
+                }
+                 &>div:nth-of-type(1){
+                    text-align: center;
+                    img{
+                        display: block;
+                        margin: 0 auto 10px;
+                        @include br(100px);
+
+                    }
+                 }
+                 &>div:nth-of-type(2) {
+                     &>div{
+                         &:nth-of-type(1){
+                             font-size:50px;
+                             font-weight: bold;
+                         }
+                         &:nth-of-type(2){
+                             color:#fafa8f;
+                         }
+                     }
+                 }
+            }
+            
+        }
+        h1{
+            line-height: 120px;;
+            padding-left: 50px;
+            img{
+                width: 50px;
+                
+            }
+            font-size:22px;
+            color:#fff;
+            font-weight: normal;
+        }
+        .zmiti-zheng{
+            @include pos(a);
+            z-index: 10;
+            right: 10px;
+            bottom: 10px;
+        }
+        .zmiti-qrcode{
+            @include pos(a);
+            z-index: 10;
+            bottom: 20px;
+            left: 20px;
+            width: 200px;
+        }
+    }
+
+
     .zmiti-talk-form{
         height: 100px;
         width: 100%;
@@ -69,6 +178,11 @@ $color: #fffb88;
                         .zmiti-headimg{
                             margin: 0 auto;
                         }
+                        &:nth-of-type(1){
+                            width:92px;
+                            height: 92px;
+                            @include br();
+                        }
                         &:nth-of-type(2) {
                            
                             &>div {
@@ -76,8 +190,9 @@ $color: #fffb88;
                                 padding: 20px 20px;
                                 @include br(10px);
                                 @include pos(r);
+                                max-width:300px;
                                 margin-right: 30px;
-                                top: 0;
+                                top: -10px;
                                 &:before {
                                  
                                     background: #a1e75b;
@@ -97,15 +212,21 @@ $color: #fffb88;
                         color: #fff;
                         font-size: 28px;
                     }
-
+                    span{
+                        display: inline-block;
+                        white-space:normal;
+                        word-wrap:break-word;
+                    }
                     &:nth-of-type(2) {
                         margin-left: 40px;
 
                         .zmiti-talk-img{
                             background: #fff;
                             padding: 10px;
+                            max-width: 400px;
                             box-sizing: border-box;
                             img{
+                                
                                 z-index: 10;
                                 @include pos(r);
                             }
@@ -136,7 +257,7 @@ $color: #fffb88;
                     width: 80px;
                     display: block;
 
-                    @include br;
+                    @include br();
 
                     border: 6px solid #fff;
                 }
@@ -190,7 +311,7 @@ $color: #fffb88;
             width: 100%;
         }
 
-        .zmiti-pk {
+        @at-root.zmiti-pk {
             @include displayBox(horizontal);
 
             -webkit-box-pack: justify;

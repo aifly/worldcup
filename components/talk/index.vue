@@ -1,9 +1,10 @@
 <template>
 	<transition name='main'>
 	
-		<div class="lt-full zmiti-talk-main-ui " :class="{'show':show}">
-			<section  class=""  :style="{height:viewH-100+'px',position:'relative',overflow:'hidden'}">
-				<div>
+		<div class="lt-full zmiti-talk-main-ui " :class="{'show':show}" >
+			
+			<section class=""  :style="{height:viewH-100+'px',position:'relative'}">
+				<div  ref='page1' >
 					<div class="zmiti-talk-title">
 						<img :src="imgs.talkTitle" alt="">
 						<div class="zmiti-barrage" v-for='(barrage,i) in barrageList' :key='i'>
@@ -63,7 +64,7 @@
 								</div>
 								<div>
 									<div v-if='talk.text'>{{talk.text}}</div>
-									<div v-if='talk.text' style="opacity:0;padding:0;">{{talk.text}}</div>
+									<div v-if='talk.text && false' style="opacity:0;padding:0;">{{talk.text}}</div>
 									<div v-if='talk.image' class="zmiti-talk-img">
 										<img  :src="talk.image" alt="">
 									</div>
@@ -72,7 +73,7 @@
 									</div>
 								</div>
 							</li>
-							<li style="height:50px;"></li>
+							<li style="height:100px;"></li>
 						</ul>
 					</div>
 				</div>
@@ -83,7 +84,7 @@
 					<span :class="{'active':text.length>0}" v-tap='[send]'>发送</span>
 				</div>
 			</div>
-			<div class="zmiti-result lt-full" v-if='result'>
+			<div class="zmiti-result lt-full" ref='page2' v-if='result'>
 				<img :src="result" alt="" @touchstart='imgStart' v-tap='[closeResult]'>
 			</div>
 			<div class="zmiti-tel lt-full" v-if='showTel'>
@@ -94,6 +95,60 @@
 					<div v-tap='[submit]'>确认</div>
 				</div>
 			</div>
+
+			<div v-show='showResult' ref='page-result' class="zmiti-result-page lt-full" :style="{background:'url('+imgs.resultBg+') no-repeat center top',backgroundSize:'cover'}">
+				<transition 
+					name='zmiti-scale'
+					@after-enter='afterEnter'
+				>
+					<div ref='createimgs' class="zmiti-createimg"  v-if='createImg'>
+						<img :src="createImg" alt="">
+						<div v-show='showShareBtn' class="zmiti-share-btn" v-tap='[showMask]'>分享</div>
+					</div>
+				</transition>
+				<section v-if='!createImg'>
+					<h1 style="height:100px;">
+						<img :src="imgs.logo" alt="">
+						新华社新媒体中心
+					</h1>
+					<div class="zmiti-pk" >
+						<div>
+							<img :src="imgs.team4" alt="">
+							<span>{{team1.teamname}}</span>
+						</div>
+						<div>
+							<img :src="imgs.logo1" alt="">
+						</div>
+						<div>
+							<img :src="imgs.team3" alt="">
+							<span>{{team2.teamname}}</span>
+						</div>
+					</div>
+					<div class="zmiti-result-content">
+						<img :src="imgs.logo3" alt="">
+						<div class="zmiti-result-user">
+							<div>
+								<img :src="headimgurl" alt="">
+								<span>{{nickname}}</span>
+							</div>
+							<div>
+								<div>本人预测</div>
+								<div>{{text1}}</div>
+							</div>
+						</div>
+					</div>
+					<div class="zmiti-zheng">
+						<img :src="imgs.zheng" alt="">
+					</div>
+					<div class="zmiti-qrcode">
+						<img :src="imgs.qrcode" alt="">
+					</div>
+				</section>
+				<div class="zmiti-mask lt-full" v-if='showMasks' @touchstart='hideMask'>
+					<img :src="imgs.arrow">
+				</div>
+			</div>
+			
 			<Toast :msg='errorMsg'></Toast>
 		</div>
 	
@@ -119,7 +174,7 @@
 	import Team from '../team/index';
 	export default {
 	
-		props: ['obserable', 'pv', 'randomPv', 'nickname', 'headimgurl'],
+		props: ['obserable', 'pv', 'randomPv'],
 	
 		name: 'zmitiindex',
 	
@@ -128,12 +183,17 @@
 			return {
 				imgs,
 				text:'',
+				text1:'',
 				showTeam: false,
 				showQrcode: false,
 				show: false,
 				team1:{},
 				points:"",
 				team2:{},
+				nickname:'',
+				headimgurl:'',
+				createImg:"",
+				showShareBtn:false,
 				viewW: window.innerWidth,
 				viewH: window.innerHeight,
 				showMasks: false,
@@ -146,6 +206,7 @@
 				talkList:[],
 				countdown:120,
 				stop:false,
+				showResult:false
 			}
 		},
 	
@@ -154,11 +215,24 @@
 			Toast
 		},
 		methods: {
+
+			hideMask(){
+				this.showMasks = false;
+			},
+			imgStart(e){
+				e.preventDefault(); 
+			},
+			showMask(){
+				this.showMasks = true;
+			},
 			focus(){
 				//this.stop = true;
 			},
 			blur(){
 				//this.stop = false;
+			},
+			afterEnter(){
+				this.showShareBtn = true;
 			},
 			send(){
 				if(!this.text){
@@ -167,6 +241,10 @@
 				var s = this;
 
 				this.$refs['text'].blur();
+				this.text1 = this.text;
+
+				this.headimgurl = window.headimgurl || imgs.logo;
+				this.nickname = window.nickname||'新华社网友'; 
 			
 				s.talkList.splice(s.index+1,0,{
 					"headimgurl":window.headimgurl || imgs.logo,
@@ -180,10 +258,22 @@
 				});
 
 				setTimeout(() => {
-					s.scroll.refresh();
+					s.text = '';
+					
+					s.index++;
+					s.stop = true;
+					clearInterval(this.timer)	
+					setTimeout(() => {
+						if(this.viewH-100-350 - this.$refs['ul'].offsetHeight<=0){
+							this.scroll.scrollTo(0,this.viewH-100-350 - this.$refs['ul'].offsetHeight,100);
+						}
+						this.scroll.refresh();
+						this.showTel = true;
+					}, 500);
 				}, 400);
-			
-				$.ajax({
+
+				return;
+				/* $.ajax({
 					type:'post',
 					url:'http://119.84.122.135:27701/reply/1',
 					data:'{"msg": "'+s.unicode(s.text)+'"}',
@@ -204,19 +294,44 @@
 								});
 								
 							});
+							
 							setTimeout(() => {
 								s.scroll.refresh();
 							}, 500);
 						}
 						
 					}
-				})
+				}) */
 			},
 			restart() {
 				window.location.href = window.location.href.split('?')[0];
 			},
 			getBarrage(){//获取弹幕
 				var s = this;
+				$.ajax({
+					url:"http://115.231.251.252:26020/web/search/common/weiboCluster/select?word=俄罗斯+沙特+(开幕|换帅|((球员|队员)+受伤)|(主帅+解约)|黄牌|分档|东道主|决赛|预选赛|进球|失球|胜球|犯规|淘汰赛|裁判|教练|禁赛|死球|罚球|点球|任意球|角球|界外球|警告|球门球|违规|判罚|守门员|获胜|冠军|亚军|季军|夺冠|主帅|新帅|停赛|小组赛|输球|突围|世界杯)&starttime=20180614&endtime=20180614&token=f43e78cc-9c39-4583-b7bf-ef3d2fcaa311",
+					data:{},
+					success(data){
+						console.log(data);
+						if(typeof data === 'string'){
+							try {
+								data = JSON.parse(data);
+								data.results.map((re)=>{
+									if(re.Content.length<=15){
+										s.barrageList.push({
+											"name":re.Author,
+											"content":re.Content
+										})
+									}
+								})
+							} catch (error) {
+								
+							}
+						}
+					}
+				})
+
+				return;
 				$.getJSON("./assets/data/barrage.json",(data)=>{
 					if(data.code === 0){
 						s.barrageList = data.list;
@@ -255,6 +370,10 @@
 							setTimeout(() => {
 								s.errorMsg = '';
 								s.showTel = false;
+								s.showResult = true;
+								setTimeout(() => {
+									s.html2img('page-result');	
+								}, 600);
 							}, 1000);
 						}else{
 							s.errorMsg = '提交失败';
@@ -266,6 +385,26 @@
 						
 					}
 				})
+			},
+			html2img(ref='page1'){
+				var s = this;
+				this.showBtns = false;
+
+				//zmitiUtil.wxConfig('我是第'+(s.pv)+'位种树者',window.desc)
+				var {obserable} = this;
+				setTimeout(()=>{
+					var dom = this.$refs[ref];
+					html2canvas(dom,{
+						useCORS: true,
+						onrendered: function(canvas) {
+					        var url =  canvas.toDataURL('image/jpg');
+
+							 s.createImg = url;
+					      },
+					      width: dom.clientWidth,
+					      height:dom.clientHeight
+					})
+				},1000)
 			},
 			getTalk(){
 				var s = this;
@@ -290,6 +429,29 @@
 							console.log(data)
 							if(data.code === 0){
 								s.talkList = data.list;
+								var arr = [];
+								s.talkList.map((item)=>{
+									if(item.image){
+										arr.push(item.image)
+									}
+									if(item.headimgurl){
+										arr.push(item.headimgurl);
+									}
+								})
+								s.loading(arr,(e)=>{
+									//console.log(e)
+								});
+								s.talkList.push({
+									"headimgurl":imgs.cow,
+									"nickname":'小牛',
+									"text": '我同意小新的观点',
+									"image": '',
+									"className":"",
+									"video":'',
+									"isreverse":false,
+									"videoposter":''
+								});
+
 								setTimeout(() => {
 									s.scroll.refresh()
 								}, 100);
@@ -305,6 +467,30 @@
 
 				
 				
+			},
+			loading: function(arr, fn, fnEnd) {
+				var len = arr.length;
+				var count = 0;
+				var i = 0;
+
+				function loadimg() {
+					if (i === len) {
+						return;
+					}
+					var img = new Image();
+					img.onload = img.onerror = function() {
+						count++;
+						if (i < len - 1) {
+							i++;
+							loadimg();
+							fn && fn(i / (len - 1), img.src);
+						} else {
+							fnEnd && fnEnd(img.src);
+						}
+					};
+					img.src = arr[i];
+				}
+				loadimg();
 			},
 			imgStart(e){
 				e.preventDefault(); 
@@ -324,12 +510,18 @@
 			this.getTalk();
 			var {obserable} = this;
 			obserable.on('entryTalk',(data)=>{
+
 				this.show = true;
 				this.team1 = data.team1;
 				this.team2 = data.team2;
 				this.points = data.points;
 				var iNow = 0;
-				var t = setInterval(()=>{
+
+				
+				this.timer = setInterval(()=>{
+					if(this.stop){
+						return;
+					}
 					this.countdown--;
 					if(this.countdown<=0){
 						var result1 = 0,result2 = 0;
@@ -340,29 +532,35 @@
 								result2++;
 							}
 						});
+						
 						if(result1>result2){
 							this.result = imgs.result1
 						}else{
 							this.result = imgs.result2;
 						}
+						///this.html2img('page2');
 						setTimeout(() => {
 							this.closeResult();
 						}, 2000);
-						clearInterval(t);
+						clearInterval(this.timer);
 					}
 					iNow++;
 					if(iNow%2===0){
 						this.index++;
+						if(this.index <= this.talkList.length -1){
+							setTimeout(() => {
+								if(this.viewH-100-350 - this.$refs['ul'].offsetHeight<=0){
+									this.scroll.scrollTo(0,this.viewH-100-350 - this.$refs['ul'].offsetHeight,100);
+								}
+								this.scroll.refresh();
+							}, 100);
+						}
 						if(this.index>=this.talkList.length-1){
 							this.index  = this.talkList.length -1;
 						}
 
-						setTimeout(() => {
-							if(this.viewH-100-350 - this.$refs['ul'].offsetHeight<=0){
-								this.scroll.scrollTo(0,this.viewH-100-350 - this.$refs['ul'].offsetHeight,100);
-							}
-							this.scroll.refresh();
-						}, 100);
+						
+						
 					}
 				},1000);
 

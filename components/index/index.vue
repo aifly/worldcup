@@ -3,12 +3,12 @@
 		<transition 
 			name='zmiti-scale'
 			@after-enter='afterEnter'
-			>
-				<div ref='createimgs' class="zmiti-createimg"  v-if='createImg'>
-					<img :src="createImg" alt="">
-					<div v-show='showShareBtn' class="zmiti-share-btn" v-tap='[showMask]'>分享</div>
-				</div>
-			</transition>
+		>
+			<div ref='createimgs' class="zmiti-createimg"  v-if='createImg'>
+				<img :src="createImg" alt="">
+				<div v-show='showShareBtn' class="zmiti-share-btn" v-tap='[showMask]'>分享</div>
+			</div>
+		</transition>
 		<transition name='index'>
 			<div class="zmiti-index lt-full" v-if='!showIndexMask'>
 				
@@ -46,6 +46,10 @@
 					<div class="zmiti-index-btns" v-show='showBtns'>
 						<div v-tap='[html2img]'>认 同</div>
 						<div v-tap='[entry]'>PK小新</div>
+					</div>
+					<div class="zmiti-copyright">
+						<img :src="imgs.logo" alt="">
+						<span>新媒体中心出品</span>
 					</div>
 				</div>
 				<canvas :width="viewW" height="900" ref='canvas'>

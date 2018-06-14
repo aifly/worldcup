@@ -112,7 +112,9 @@
 .zmiti-index-main-ui .zmiti-index-logo {
   position: absolute;
   right: 0;
+  width: 300px;
   top: 0;
+  z-index: 1000;
 }
 
 .zmiti-index-main-ui canvas {
@@ -135,6 +137,23 @@
 .zmiti-index-main-ui .zmiti-index .zmiti-index-bottom {
   height: 300px;
   width: 100%;
+  position: relative;
+}
+
+.zmiti-index-main-ui .zmiti-index .zmiti-index-bottom .zmiti-copyright {
+  position: absolute;
+  -webkit-transform: scale(0.9);
+  transform: scale(0.9);
+  right: 10px;
+  color: #000;
+  font-size: 26px;
+  bottom: 190px;
+}
+
+.zmiti-index-main-ui .zmiti-index .zmiti-index-bottom .zmiti-copyright img {
+  display: block;
+  width: 70px;
+  margin: 0 auto 10px;
 }
 
 .zmiti-index-main-ui .zmiti-index .zmiti-index-bottom .zmiti-index-btns {
@@ -182,6 +201,8 @@
 
 .zmiti-index-main-ui .zmiti-title > img {
   margin-left: -3%;
+  position: relative;
+  top: 30px;
 }
 
 .zmiti-index-main-ui .zmiti-title .zmiti-vs {
